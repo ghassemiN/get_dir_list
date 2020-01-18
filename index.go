@@ -9,6 +9,7 @@ import (
     "crypto/md5"
     "encoding/hex"
     "io"
+    "net/http"
 )
 
 
@@ -40,6 +41,13 @@ func hash_file_md5(filePath string) (string, error) {
 
 
 func main() {
+    http.HandleFunc("/", servePage)
+    http.ListenAndServe(":8080", nil)
+}
+
+
+func servePage(writer http.ResponseWriter, reqest *http.Request) {
+
     var list []Detail
 
     //read a directory
@@ -57,14 +65,13 @@ func main() {
         }
         list=append(list, Detail{f.Name(), f.Size(), hash})
   
-    }
-
-    //convert to json
+    }  
     b, err := json.Marshal(list)
-
     if err != nil {
-        fmt.Println("error:", err)
+        http.Error(writer, err.Error(), http.StatusInternalServerError)
+        return
     }
-    os.Stdout.Write(b)
 
+  writer.Header().Set("Content-Type", "application/json")
+  writer.Write(b)
 }
