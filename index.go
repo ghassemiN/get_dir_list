@@ -22,7 +22,7 @@ type Detail struct {
 
 
 //Generate Hash of files
-func hash_file_md5(filePath string) (string, error) {
+func hashFileMd5(filePath string) (string, error) {
     var returnMD5String string
     file, err := os.Open(filePath)
     if err != nil {
@@ -59,7 +59,7 @@ func servePage(writer http.ResponseWriter, reqest *http.Request) {
     //get detail from each elemnt in the dir
     for _, f := range files {
         
-        hash, err := hash_file_md5(f.Name())
+        hash, err := hashFileMd5(f.Name())
         if err == nil {
             fmt.Println(hash)
         }
