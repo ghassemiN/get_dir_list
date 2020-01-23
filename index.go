@@ -43,8 +43,8 @@ func main() {
 
 func servePage(writer http.ResponseWriter, reqest *http.Request) {
 	var list []Detail
-	//read a directory
-	files, err := ioutil.ReadDir("./")
+	//get directory path
+	files, err := ioutil.ReadDir("./" + reqest.URL.Path)
 	if err != nil {
 		log.Fatal(err)
 	}
